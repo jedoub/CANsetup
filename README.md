@@ -16,8 +16,8 @@ Follow the directions found in the CANsetup.cs source file to integrate the SETU
 * Install the CANLIB SDK found on the Kvaser Website. I have version 5.27 of the Kvaser SDK.
 * 
 * In the Documentation Folder of the SDK the user will find the CANlib API methods for dotNet and C#.
-* Their are hyper-links to rather trivial examples, and several are pure C-code. 
-* The examples, demonstrate the use of the methods in the library.
+* There are hyper-links in the SDK to rather trivial examples, and several are pure C-code. 
+* The examples, demonstrate how the methods in the library are used.
 * 
 * I hope this code will help jump start your CAN application.
 * 
@@ -25,10 +25,10 @@ Follow the directions found in the CANsetup.cs source file to integrate the SETU
 * 
 * Create a Windows Forms Project for demonstration purposes in Visual Studio.
 * 
-* ADD the necessary REFERENCES to DLLs used by the APP.
+* Install the Kvaser Driver and add the necessary REFERENCES to DLLs used by the APP.
 * The VS Project's Solution Explorer Tab contains the References container object.
 * Add canlibCLSNET & System.Management by navigating to their source.
-* Speaking of DLLs, you can accomplish code reuse in this manner. [In Visual Studio begin by selecting a C++ Project type DLL].
+* Speaking of DLLs, you can accomplish code reuse by making this APP a DLL. [In Visual Studio begin by selecting a C++ Project type DLL].
 * 
 * Know/Find the location of the CANsetup project source, or Clone a solution from the GIT repository for your use.
 * 
@@ -44,19 +44,18 @@ Follow the directions found in the CANsetup.cs source file to integrate the SETU
 * 
 * You now have 2 of the 4 source files necessary for the CANsetup Form referenced by two projects.
 * 
-* I also made an additional Form that pops up a box allowing the user associate a name with a CAN subnet. 
-* I typically use the "Standard Volvo" subnet names (BB1, ESN, BB2, PWT), plus ISN for Instrumentation subnet, but this provides naming flexibility like other generic CAN tools.
-* Separately LINK these source files as well:
+* I also made an additional Subnet form that pops up a text box allowing the user to associate a name with a particular CAN subnet. 
+* I typically use the names like BB1, ESN, BB2, PWT or ISN. This feature provides naming flexibility like other generic CAN tools.
+* Separately LINK these source files into your new project as well:
 * EnterSubnetForm.cs, EnterSubnetForm.Designer.cs, (EnterSubnetForm.resx will be generated)
 * 
 * The source files for the CANsetup utilize the same namespace so a single using reference is all that is necessary in the Form1.cs of your project. (i.e. using CANsetup;)
 * 
-* To work with CANsetup Form the developer also needs to instantiate the class. This is added using the new keyword as shown below.
+* To work with CANsetup Form in your project the developer also needs to instantiate the class. This is added using the new keyword as shown below.
 * CANsetupForm idNselcCAN_HW = new CANsetupForm();
 * 
 * To automate the launch of a Form contained in a Class I use the C# ShowDialog() function.
 * 
 * Also, note the use of private and public data types. This is a simplistic way to exchange data between different classes contained in different files of a project.
 * 
-* Another, less manageable way to reuse C code is to copy the source files into the project's folder and add the files into the VS Solution Explorer. 
-
+* Another, less manageable way, to reuse this code in another project is to simply copy the source files into the project's folder and add the files into the VS Solution Explorer. 
