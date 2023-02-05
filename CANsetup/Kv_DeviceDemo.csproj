@@ -91,9 +91,8 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="canlibCLSNET, Version=8.27.776.1, Culture=neutral, PublicKeyToken=bb7f2cd46200de24, processorArchitecture=AMD64">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\Kvaser\Canlib\dotnet\x64\fw40\canlibCLSNET.dll</HintPath>
+    <Reference Include="Kvaser.CanLib">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Kvaser\Canlib\dotnet\x64\netstandard2.0\Kvaser.CanLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />

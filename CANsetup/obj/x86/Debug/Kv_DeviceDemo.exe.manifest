@@ -44,18 +44,6 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="canlibCLSNET.dll" size="71680">
-      <assemblyIdentity name="canlibclsnet" version="8.27.776.1" publicKeyToken="BB7F2CD46200DE24" language="neutral" processorArchitecture="amd64" />
-      <hash>
-        <dsig:Transforms>
-          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
-        </dsig:Transforms>
-        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>hDSLO+gBOFpItckYbEO43V8bYTK1RSAkWjG0GwDBF3U=</dsig:DigestValue>
-      </hash>
-    </dependentAssembly>
-  </dependency>
-  <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Kv_DeviceDemo.exe" size="213504">
       <assemblyIdentity name="Kv_DeviceDemo" version="1.0.0.22" language="neutral" processorArchitecture="amd64" />
       <hash>
@@ -63,7 +51,19 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>vb5sqSgpW2Iz5TA+X21xcvL8F5Fm5GiZ0EgklvBeIJM=</dsig:DigestValue>
+        <dsig:DigestValue>ZdIomXTbmBEy0BPUzmA/LTVBV4zxTy0EXhaAgPdY5B4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Kvaser.CanLib.dll" size="50176">
+      <assemblyIdentity name="Kvaser.CanLib" version="1.8.565.0" publicKeyToken="DE45D0B2DBAF25B3" language="neutral" processorArchitecture="amd64" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>UwTCRExwaYhf1qXu0w8Cu+6LbSwEZH0m8KE+CKbbEe4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using Kvaser.CanLib;
 using CANsetup;
 
 
@@ -13,7 +13,7 @@ namespace Kv_DeviceDemo
 {
     public partial class Form1 : Form
     {
-        private static string SWvers = "2.0.0.1";
+        private static string SWvers = "2.0.0.2";
         
         CANsetupForm idNselcCAN_HW = new CANsetupForm();
         
@@ -21,7 +21,7 @@ namespace Kv_DeviceDemo
 
         OSSForm aboutOSL = new OSSForm();
 
-        private static canlibCLSNET.Canlib.canStatus can_status;   //A KVASER CANLIBRARY OBJECT
+        private static Canlib.canStatus can_status;   //A KVASER CANLIBRARY OBJECT
         private static int dlc = 8, flag;
         private static long time, GUIinterval = 0, GUIintervalPV = 0, execTime = 0;
 
@@ -185,15 +185,15 @@ namespace Kv_DeviceDemo
                 //MessageBox.Show("CODE TO FOLLOW GOES HERE.", "INFO");
                 // For this example I start a timer that periodically updates the GUI's text box object found on the main Form.
                 if (CANsetupForm.txtCAN_HW.Contains(CANsetupForm.subNetName[1]))
-                    canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN1hnd);
+                    Canlib.canFlushReceiveQueue(CANsetupForm.CAN1hnd);
                 if (CANsetupForm.txtCAN_HW.Contains(CANsetupForm.subNetName[2]))
-                    canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN2hnd);
+                    Canlib.canFlushReceiveQueue(CANsetupForm.CAN2hnd);
                 if (CANsetupForm.txtCAN_HW.Contains(CANsetupForm.subNetName[3]))
-                    canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN3hnd);
+                    Canlib.canFlushReceiveQueue(CANsetupForm.CAN3hnd);
                 if (CANsetupForm.txtCAN_HW.Contains(CANsetupForm.subNetName[4]))
-                    canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN4hnd);
+                    Canlib.canFlushReceiveQueue(CANsetupForm.CAN4hnd);
                 if (CANsetupForm.txtCAN_HW.Contains(CANsetupForm.subNetName[5]))
-                    canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN5hnd);                
+                    Canlib.canFlushReceiveQueue(CANsetupForm.CAN5hnd);                
 
                 button1.Text = "OnLine";
                 GUItimer.Enabled = true;
@@ -212,16 +212,17 @@ namespace Kv_DeviceDemo
 
             GUIintervalPV = GUIinterval;
 
-            GUIinterval = canlibCLSNET.Canlib.canReadTimer(CANsetupForm.CAN1hnd);
+            //OLD method GUIinterval = Canlib.canReadTimer(CANsetupForm.CAN1hnd);
+            can_status = Canlib.kvReadTimer64(CANsetupForm.CAN1hnd, out GUIinterval);    // Update the time every loop.
 
             if (button1.Text.Contains("OnLine"))
             {
                 if (CANsetupForm.chn1ConfigSuccess)
                 {
                     // Read the EEC1 message on CAN1
-                    can_status = canlibCLSNET.Canlib.canReadSpecificSkip(CANsetupForm.CAN1hnd, EEC1_X_E, EEC1msg, out dlc, out flag, out time);
+                    can_status = Canlib.canReadSpecificSkip(CANsetupForm.CAN1hnd, EEC1_X_E, EEC1msg, out dlc, out flag, out time);
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         // Display the ENGINE SPEED
                         textBuffer[0] = "CAN1.EEC1xE.EngSpd: " + ((EEC1msg[4] * 256 + EEC1msg[3]) * 0.125).ToString("F1");
@@ -240,8 +241,8 @@ namespace Kv_DeviceDemo
                 if (CANsetupForm.chn2ConfigSuccess)
                 {
                     // Read the Engine Speed in PM21xE message on CAN2
-                    can_status = canlibCLSNET.Canlib.canReadSpecificSkip(CANsetupForm.CAN2hnd, PM21_X_E, PM21msg, out dlc, out flag, out time);
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    can_status = Canlib.canReadSpecificSkip(CANsetupForm.CAN2hnd, PM21_X_E, PM21msg, out dlc, out flag, out time);
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         // Display the ENGINE SPEED
                         textBuffer[2] += "CAN2.PM21xE.EngSpd: " + ((PM21msg[3] * 256 + PM21msg[2]) * 0.125).ToString("F1");
@@ -260,8 +261,8 @@ namespace Kv_DeviceDemo
                 if (CANsetupForm.chn3ConfigSuccess)
                 {
                     // Read the EEC1 message on CAN3
-                    can_status = canlibCLSNET.Canlib.canReadSpecificSkip(CANsetupForm.CAN3hnd, EEC1_X_E, EEC1msg, out dlc, out flag, out time);
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    can_status = Canlib.canReadSpecificSkip(CANsetupForm.CAN3hnd, EEC1_X_E, EEC1msg, out dlc, out flag, out time);
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         // Display the ENGINE SPEED
                         textBuffer[4] += "CAN3.EEC1xE.EngSpd: " + ((EEC1msg[4] * 256 + EEC1msg[3]) * 0.125).ToString("F1");
@@ -280,8 +281,8 @@ namespace Kv_DeviceDemo
                 if (CANsetupForm.chn4ConfigSuccess)
                 {
                     // Read the Engine Speed in PM24xE message on CAN4
-                    can_status = canlibCLSNET.Canlib.canReadSpecificSkip(CANsetupForm.CAN4hnd, PM24_X_E, PM24msg, out dlc, out flag, out time);
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    can_status = Canlib.canReadSpecificSkip(CANsetupForm.CAN4hnd, PM24_X_E, PM24msg, out dlc, out flag, out time);
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         // Display the ENGINE SPEED
                         textBuffer[6] += "CAN4.PM24xE.EngSpd: " + ((PM24msg[2] * 256 + PM24msg[1]) * 0.125).ToString("F1");
@@ -298,8 +299,8 @@ namespace Kv_DeviceDemo
                     textBuffer[7] += Environment.NewLine;
 
                     // Read the EEC1 message on CHN5
-                    can_status = canlibCLSNET.Canlib.canReadSpecificSkip(CANsetupForm.CAN5hnd, EEC1_X_E, EEC1msg, out dlc, out flag, out time);
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    can_status = Canlib.canReadSpecificSkip(CANsetupForm.CAN5hnd, EEC1_X_E, EEC1msg, out dlc, out flag, out time);
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         // Display the ENGINE SPEED
                         textBuffer[8] += "CAN5.EEC1xE.EngSpd: " + ((EEC1msg[4] * 256 + EEC1msg[3]) * 0.125).ToString("F1");
@@ -324,17 +325,18 @@ namespace Kv_DeviceDemo
             }
 
             if (CANsetupForm.txtCAN_HW.Contains("BB1"))
-                canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN1hnd);
+                Canlib.canFlushReceiveQueue(CANsetupForm.CAN1hnd);
             if (CANsetupForm.txtCAN_HW.Contains("ESN"))
-                canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN2hnd);
+                Canlib.canFlushReceiveQueue(CANsetupForm.CAN2hnd);
             if (CANsetupForm.txtCAN_HW.Contains("BB2"))
-                canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN3hnd);
+                Canlib.canFlushReceiveQueue(CANsetupForm.CAN3hnd);
             if (CANsetupForm.txtCAN_HW.Contains("PWT"))
-                canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN4hnd);
+                Canlib.canFlushReceiveQueue(CANsetupForm.CAN4hnd);
             if (CANsetupForm.txtCAN_HW.Contains("ISN"))
-                canlibCLSNET.Canlib.canFlushReceiveQueue(CANsetupForm.CAN5hnd);
+                Canlib.canFlushReceiveQueue(CANsetupForm.CAN5hnd);
 
-            execTime = canlibCLSNET.Canlib.canReadTimer(CANsetupForm.CAN1hnd);
+            //execTime = Canlib.canReadTimer(CANsetupForm.CAN1hnd);
+            can_status = Canlib.kvReadTimer64(CANsetupForm.CAN1hnd, out execTime);    // Update the time at the end of the method.
 
             updateIntervalLbl.Text = "GUI Timer Interval: " + (GUIinterval - GUIintervalPV).ToString("D4") + " ms";
             updateIntervalLbl.Text += "  Execution Time: " + (execTime - GUIinterval).ToString("D4") + " ms";

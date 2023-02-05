@@ -13,14 +13,14 @@
     <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="Kv_DeviceDemo.exe.manifest" size="5499">
+    <dependentAssembly dependencyType="install" codebase="Kv_DeviceDemo.exe.manifest" size="5500">
       <assemblyIdentity name="Kv_DeviceDemo.exe" version="1.0.1.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="amd64" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>dm58D4OHXZ16EQvEa3/rWV6WNZBoKCVgQwra4FGqEBQ=</dsig:DigestValue>
+        <dsig:DigestValue>YW+ohG2+4osLbqouyhyj56V59bBos+ILHv906tvmA3I=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

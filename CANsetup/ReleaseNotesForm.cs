@@ -51,7 +51,7 @@ namespace CANsetup
             richTextBox1.Text += Environment.NewLine;
             richTextBox1.Text += "REV 1.0.1.2  Comments on how to use this SW in another Project.";
             richTextBox1.Text += Environment.NewLine;
-            richTextBox1.Text += "REV 2.0.0.0  Made the APP more Generic.";
+            richTextBox1.Text += "REV 2.0.0.2  Made the APP more Generic. Updated the Kvaser DLL to 8.40. Bitrate is used instead of Baud, and Kv_TimerReads are different";
             richTextBox1.Text += Environment.NewLine;
         }
 

@@ -6,7 +6,7 @@ using System.IO;                        // File handling
 using System.Linq;
 using System.Management;                // For finding the CANLIB Device Driver
 using System.Windows.Forms;
-//using Kvaser CanLib;
+using Kvaser.CanLib;
 
 /* Tips for reusing SW by adding existing Classes into a Project/Solution.
  * A Class is simply a chuck of code that does a particular job.
@@ -39,7 +39,7 @@ using System.Windows.Forms;
  * For This particular example, Browse to the xxxForm.cs file in another project, and Single-click to select the file
  * 
  * Only select ONE of the xxxForm.cs files to add to the Project at a time. 
- * If you select multiple .cs files for different WinForms, Visual Studio doesn't add them into the solution correctly. Repeat as necessary.
+ * If you select multiple .cs files for different WinForms, the Visual Studio vers I had didn't add them into the solution correctly. Repeat as necessary.
  * Now that the File is selected in the browse window, mouse over and click the down-arrow button to the right of Add and select Add as Link.
  * Then select the CANsetupForm.designer.cs, (CANsetupForm.resx will be generated), and add as Link. 
  * Code re-use can also be accomplished by copying the source files and then adding the files to the Solution Explorer. The same rules apply.
@@ -81,7 +81,7 @@ namespace CANsetup
 
         //******************************************* KVASER CAN OBJECTS  ******************************************
         //**********************************************************************************************************
-        private static canlibCLSNET.Canlib.canStatus can_status;   //A KVASER CANLIBRARY OBJECT
+        private static Canlib.canStatus can_status;   //A KVASER CANLIBRARY OBJECT
         private static object CANinfo, devSN;
         //**********************************************************************************************************
 
@@ -104,7 +104,7 @@ namespace CANsetup
             InitializeComponent();
 
             // CALL THE KVASER CANLIBRARY
-            canlibCLSNET.Canlib.canInitializeLibrary();
+            Canlib.canInitializeLibrary();
         }
 
         #region "Create CAN configuration OR Read CAN configuration File"
@@ -644,14 +644,14 @@ namespace CANsetup
             CAN_HW_tB.Clear();
 
             // Poll HW to determine the number of channels. Since Virtual Channels are included I added a test for that.
-            can_status = canlibCLSNET.Canlib.canGetNumberOfChannels(out channelCount);
+            can_status = Canlib.canGetNumberOfChannels(out channelCount);
 
-            if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+            if (can_status == Canlib.canStatus.canOK)
             {
                 if (channelCount <= 2)
                 {
                     //GET info about the existing CAN HW CHANNEL connected to the PC
-                    can_status = canlibCLSNET.Canlib.canGetChannelData(chnCnt, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                    can_status = Canlib.canGetChannelData(chnCnt, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
 
                     // If the first channel is a virtual Kvaser Device Ignore it and abort after informing the user
                     if ((CANinfo.ToString().Contains("Virtual")))
@@ -666,14 +666,14 @@ namespace CANsetup
                 while (chnCnt < channelCount)
                 {
                     // GET info about the existing CAN HW CHANNEL connected to the PC
-                    can_status = canlibCLSNET.Canlib.canGetChannelData(chnCnt, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                    can_status = Canlib.canGetChannelData(chnCnt, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
 
                     // Ignore virtual Kvaser Devices/channels at the end of the while loop
                     if (!CANinfo.ToString().Contains("Virtual"))
                     {
-                        can_status = canlibCLSNET.Canlib.canGetChannelData(chnCnt, canlibCLSNET.Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
+                        can_status = Canlib.canGetChannelData(chnCnt, Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
 
-                        if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                        if (can_status == Canlib.canStatus.canOK)
                         {
                             // Check if the Device has been encountered previously
                             if (!devSN_pv.Contains(devSN.ToString()))
@@ -954,19 +954,19 @@ namespace CANsetup
             if (CAN1chanSelc)
             {
                 //You must pass a channel number and not a channel handle.
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN1hnd, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN1hnd, canlibCLSNET.Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
+                can_status = Canlib.canGetChannelData(CAN1hnd, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                can_status = Canlib.canGetChannelData(CAN1hnd, Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
 
-                if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status == Canlib.canStatus.canOK)
                 {
-                    CAN1hnd = canlibCLSNET.Canlib.canOpenChannel(CAN1hnd, canlibCLSNET.Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
+                    CAN1hnd = Canlib.canOpenChannel(CAN1hnd, Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
 
-                    can_status = canlibCLSNET.Canlib.canSetBusOutputControl(CAN1hnd, canlibCLSNET.Canlib.canDRIVER_NORMAL);
+                    can_status = Canlib.canSetBusOutputControl(CAN1hnd, Canlib.canDRIVER_NORMAL);
 
                     // Check the Bitrate for BB1 [TEA2+ (250kBd) or TEA2+T2 (500kBd)]
                     if (chnOneBR_comboBox.SelectedIndex == 0)
                     {
-                        can_status = canlibCLSNET.Canlib.canSetBusParams(CAN1hnd, canlibCLSNET.Canlib.BAUD_250K, 0, 0, 0, 0, 0);
+                        can_status = Canlib.canSetBusParams(CAN1hnd, Canlib.canBITRATE_250K, 0, 0, 0, 0);
 
                         CAN_HW_tB.Text += subNetName[1] + " = " + CANinfo.ToString();
 
@@ -976,7 +976,7 @@ namespace CANsetup
                     }
                     else
                     {
-                        can_status = canlibCLSNET.Canlib.canSetBusParams(CAN1hnd, canlibCLSNET.Canlib.BAUD_500K, 0, 0, 0, 0, 0);
+                        can_status = Canlib.canSetBusParams(CAN1hnd, Canlib.canBITRATE_500K, 0, 0, 0, 0);
 
                         CAN_HW_tB.Text += subNetName[1] + " = " + CANinfo.ToString();
 
@@ -986,7 +986,7 @@ namespace CANsetup
                     }
                 }
 
-                if (can_status != canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status != Canlib.canStatus.canOK)
                 {
                     chnCnt = channelCount;
                     CAN1chanSelc = false;
@@ -1004,20 +1004,20 @@ namespace CANsetup
             }
             if (CAN2chanSelc)
             {
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN2hnd, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN2hnd, canlibCLSNET.Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
+                can_status = Canlib.canGetChannelData(CAN2hnd, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                can_status = Canlib.canGetChannelData(CAN2hnd, Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
 
-                if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status == Canlib.canStatus.canOK)
                 {
-                    CAN2hnd = canlibCLSNET.Canlib.canOpenChannel(CAN2hnd, canlibCLSNET.Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
-                    can_status = canlibCLSNET.Canlib.canSetBusParams(CAN2hnd, canlibCLSNET.Canlib.BAUD_250K, 0, 0, 0, 0, 0);
+                    CAN2hnd = Canlib.canOpenChannel(CAN2hnd, Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
+                    can_status = Canlib.canSetBusParams(CAN2hnd, Canlib.canBITRATE_250K, 0, 0, 0, 0);
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
-                        can_status = canlibCLSNET.Canlib.canSetBusOutputControl(CAN2hnd, canlibCLSNET.Canlib.canDRIVER_NORMAL);
+                    if (can_status == Canlib.canStatus.canOK)
+                        can_status = Canlib.canSetBusOutputControl(CAN2hnd, Canlib.canDRIVER_NORMAL);
                     else
                         MessageBox.Show("Error Initializing ESN " + can_status.ToString(), "KVASER STATUS BOX");
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         CAN_HW_tB.Text += subNetName[2] + " = " + CANinfo.ToString();
 
@@ -1027,7 +1027,7 @@ namespace CANsetup
                     }
                     else
                     {
-                        can_status = canlibCLSNET.Canlib.canSetBusParams(CAN2hnd, canlibCLSNET.Canlib.BAUD_500K, 0, 0, 0, 0, 0);
+                        can_status = Canlib.canSetBusParams(CAN2hnd, Canlib.canBITRATE_500K, 0, 0, 0, 0);
 
                         CAN_HW_tB.Text += subNetName[1] + " = " + CANinfo.ToString();
 
@@ -1037,7 +1037,7 @@ namespace CANsetup
                     }
                 }
 
-                if (can_status != canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status != Canlib.canStatus.canOK)
                 {
                     chnCnt = channelCount;
                     CAN1chanSelc = false;
@@ -1055,20 +1055,20 @@ namespace CANsetup
             }
             if (CAN3chanSelc)
             {
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN3hnd, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN3hnd, canlibCLSNET.Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
+                can_status = Canlib.canGetChannelData(CAN3hnd, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                can_status = Canlib.canGetChannelData(CAN3hnd, Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
 
-                if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status == Canlib.canStatus.canOK)
                 {
-                    CAN3hnd = canlibCLSNET.Canlib.canOpenChannel(CAN3hnd, canlibCLSNET.Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
-                    can_status = canlibCLSNET.Canlib.canSetBusParams(CAN3hnd, canlibCLSNET.Canlib.BAUD_500K, 0, 0, 0, 0, 0);
+                    CAN3hnd = Canlib.canOpenChannel(CAN3hnd, Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
+                    can_status = Canlib.canSetBusParams(CAN3hnd, Canlib.canBITRATE_500K, 0, 0, 0, 0);
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
-                        can_status = canlibCLSNET.Canlib.canSetBusOutputControl(CAN3hnd, canlibCLSNET.Canlib.canDRIVER_NORMAL);
+                    if (can_status == Canlib.canStatus.canOK)
+                        can_status = Canlib.canSetBusOutputControl(CAN3hnd, Canlib.canDRIVER_NORMAL);
                     else
                         MessageBox.Show("Error Initializing BB2 " + can_status.ToString(), "KVASER STATUS BOX");
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         CAN_HW_tB.Text += subNetName[3] + " = " + CANinfo.ToString();
 
@@ -1078,7 +1078,7 @@ namespace CANsetup
                     }
                     else
                     {
-                        can_status = canlibCLSNET.Canlib.canSetBusParams(CAN3hnd, canlibCLSNET.Canlib.BAUD_250K, 0, 0, 0, 0, 0);
+                        can_status = Canlib.canSetBusParams(CAN3hnd, Canlib.canBITRATE_250K, 0, 0, 0, 0);
 
                         CAN_HW_tB.Text += subNetName[1] + " = " + CANinfo.ToString();
 
@@ -1088,7 +1088,7 @@ namespace CANsetup
                     }
                 }
 
-                if (can_status != canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status != Canlib.canStatus.canOK)
                 {
                     chnCnt = channelCount;
                     CAN1chanSelc = false;
@@ -1107,20 +1107,20 @@ namespace CANsetup
             
             if (CAN4chanSelc)
             {
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN4hnd, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN4hnd, canlibCLSNET.Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
+                can_status = Canlib.canGetChannelData(CAN4hnd, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                can_status = Canlib.canGetChannelData(CAN4hnd, Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
 
-                if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status == Canlib.canStatus.canOK)
                 {
-                    CAN4hnd = canlibCLSNET.Canlib.canOpenChannel(CAN4hnd, canlibCLSNET.Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
-                    can_status = canlibCLSNET.Canlib.canSetBusParams(CAN4hnd, canlibCLSNET.Canlib.BAUD_500K, 0, 0, 0, 0, 0);
+                    CAN4hnd = Canlib.canOpenChannel(CAN4hnd, Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
+                    can_status = Canlib.canSetBusParams(CAN4hnd, Canlib.canBITRATE_500K, 0, 0, 0, 0);
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
-                        can_status = canlibCLSNET.Canlib.canSetBusOutputControl(CAN4hnd, canlibCLSNET.Canlib.canDRIVER_NORMAL);
+                    if (can_status == Canlib.canStatus.canOK)
+                        can_status = Canlib.canSetBusOutputControl(CAN4hnd, Canlib.canDRIVER_NORMAL);
                     else
                         MessageBox.Show("Error Initializing PWT " + can_status.ToString(), "KVASER STATUS BOX");
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         CAN_HW_tB.Text += subNetName[4] + " = " + CANinfo.ToString();
 
@@ -1130,7 +1130,7 @@ namespace CANsetup
                     }
                     else
                     {
-                        can_status = canlibCLSNET.Canlib.canSetBusParams(CAN4hnd, canlibCLSNET.Canlib.BAUD_250K, 0, 0, 0, 0, 0);
+                        can_status = Canlib.canSetBusParams(CAN4hnd, Canlib.canBITRATE_250K, 0, 0, 0, 0);
 
                         CAN_HW_tB.Text += subNetName[1] + " = " + CANinfo.ToString();
 
@@ -1140,7 +1140,7 @@ namespace CANsetup
                     }
                 }
 
-                if (can_status != canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status != Canlib.canStatus.canOK)
                 {
                     chnCnt = channelCount;
                     CAN1chanSelc = false;
@@ -1158,20 +1158,20 @@ namespace CANsetup
             }
             if (CAN5chanSelc)
             {
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN5hnd, canlibCLSNET.Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
-                can_status = canlibCLSNET.Canlib.canGetChannelData(CAN5hnd, canlibCLSNET.Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
+                can_status = Canlib.canGetChannelData(CAN5hnd, Canlib.canCHANNELDATA_CHANNEL_NAME, out CANinfo);
+                can_status = Canlib.canGetChannelData(CAN5hnd, Canlib.canCHANNELDATA_CARD_SERIAL_NO, out devSN);
 
-                if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status == Canlib.canStatus.canOK)
                 {
-                    CAN5hnd = canlibCLSNET.Canlib.canOpenChannel(CAN5hnd, canlibCLSNET.Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
-                    can_status = canlibCLSNET.Canlib.canSetBusParams(CAN5hnd, canlibCLSNET.Canlib.BAUD_250K, 0, 0, 0, 0, 0);
+                    CAN5hnd = Canlib.canOpenChannel(CAN5hnd, Canlib.canOPEN_OVERRIDE_EXCLUSIVE);
+                    can_status = Canlib.canSetBusParams(CAN5hnd, Canlib.canBITRATE_250K, 0, 0, 0, 0);
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
-                        can_status = canlibCLSNET.Canlib.canSetBusOutputControl(CAN5hnd, canlibCLSNET.Canlib.canDRIVER_NORMAL);
+                    if (can_status == Canlib.canStatus.canOK)
+                        can_status = Canlib.canSetBusOutputControl(CAN5hnd, Canlib.canDRIVER_NORMAL);
                     else
                         MessageBox.Show("Error Initializing ISN " + can_status.ToString(), "KVASER STATUS BOX");
 
-                    if (can_status == canlibCLSNET.Canlib.canStatus.canOK)
+                    if (can_status == Canlib.canStatus.canOK)
                     {
                         CAN_HW_tB.Text += subNetName[5] + " = " + CANinfo.ToString();
 
@@ -1181,7 +1181,7 @@ namespace CANsetup
                     }
                     else
                     {
-                        can_status = canlibCLSNET.Canlib.canSetBusParams(CAN5hnd, canlibCLSNET.Canlib.BAUD_500K, 0, 0, 0, 0, 0);
+                        can_status = Canlib.canSetBusParams(CAN5hnd, Canlib.canBITRATE_500K, 0, 0, 0, 0);
 
                         CAN_HW_tB.Text += subNetName[1] + " = " + CANinfo.ToString();
 
@@ -1191,7 +1191,7 @@ namespace CANsetup
                     }
                 }
 
-                if (can_status != canlibCLSNET.Canlib.canStatus.canOK)
+                if (can_status != Canlib.canStatus.canOK)
                 {
                     chnCnt = channelCount;
                     CAN1chanSelc = false;
@@ -1643,23 +1643,23 @@ namespace CANsetup
 
             if (CAN_HW_tB.Text.Contains(subNetName[1]))
             {
-                canlibCLSNET.Canlib.canBusOn(CAN1hnd);
+                Canlib.canBusOn(CAN1hnd);
             }
             if (CAN_HW_tB.Text.Contains(subNetName[2]))
             {
-                canlibCLSNET.Canlib.canBusOn(CAN2hnd);
+                Canlib.canBusOn(CAN2hnd);
             }
             if (CAN_HW_tB.Text.Contains(subNetName[3]))
             {
-                canlibCLSNET.Canlib.canBusOn(CAN3hnd);
+                Canlib.canBusOn(CAN3hnd);
             }
             if (CAN_HW_tB.Text.Contains(subNetName[4]))
             {
-                canlibCLSNET.Canlib.canBusOn(CAN4hnd);
+                Canlib.canBusOn(CAN4hnd);
             }
             if (CAN_HW_tB.Text.Contains(subNetName[5]))
             {
-                canlibCLSNET.Canlib.canBusOn(CAN5hnd);
+                Canlib.canBusOn(CAN5hnd);
             }
             this.DialogResult = DialogResult.OK;
         }
