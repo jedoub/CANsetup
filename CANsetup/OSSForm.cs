@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Kv_DeviceDemo
@@ -27,7 +21,7 @@ namespace Kv_DeviceDemo
 
         private void OSSForm_Load(object sender, EventArgs e)
         {
-            richTextBox1.Text = "Copyright(c) 2011 - 2017 GitHub Inc.";
+            richTextBox1.Text = "Copyright(c) 2011 - 2017 GitHub Inc. Author: johnedoub@gmail.com";
             richTextBox1.Text += Environment.NewLine;
             richTextBox1.Text += Environment.NewLine;
             richTextBox1.Text += "Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files(the \"Software\")," +
